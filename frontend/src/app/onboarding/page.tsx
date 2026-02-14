@@ -1,5 +1,6 @@
 'use client';
 
+import A from '@components/onboarding/A'
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
