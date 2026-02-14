@@ -4,10 +4,18 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { CalendarIcon, ClockIcon, MapPinIcon } from '@heroicons/react/24/outline';
 
+interface Service {
+  id: string;
+  name: string;
+  description: string;
+  duration: number;
+  price: number;
+  location_type: string;
+}
 export default function PublicBookingPage() {
   const params = useParams();
   const [workspace, setWorkspace] = useState(null);
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
