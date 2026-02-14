@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "@types/react": "^19.2.14"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-query-devtools": "^5.91.3",
+    "socket.io-client": "^4.8.3"
+  }
+}
