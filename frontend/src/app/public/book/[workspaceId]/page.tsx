@@ -11,6 +11,7 @@ interface Service {
   duration: number;
   price: number;
   location_type: string;
+  location?: string;
 }
 export default function PublicBookingPage() {
   const params = useParams();
