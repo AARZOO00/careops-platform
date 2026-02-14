@@ -6,7 +6,6 @@ services:
     plan: free
     region: oregon
     buildCommand: |
-      mkdir -p /tmp/.cargo /tmp/.rustup
       pip install --upgrade pip
       pip install --only-binary :all: -r backend/requirements.txt
     startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
@@ -21,3 +20,5 @@ services:
         value: /tmp/.cargo
       - key: RUSTUP_HOME
         value: /tmp/.rustup
+      - key: FRONTEND_URL
+        value: https://careops-frontend.onrender.com
