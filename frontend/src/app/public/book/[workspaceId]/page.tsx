@@ -16,7 +16,7 @@ export default function PublicBookingPage() {
   const params = useParams();
   const [workspace, setWorkspace] = useState(null);
   const [services, setServices] = useState<Service[]>([]);
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [step, setStep] = useState(1);
