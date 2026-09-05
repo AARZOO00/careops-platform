@@ -72,7 +72,7 @@ export default function DashboardClient({ data = demoData }: DashboardClientProp
   return (
     <DashboardLayout>
       <AnimatePresence>
-        {searchOpen && <SmartSearch onClose={() => setSearchOpen(false)} />}
+        {searchOpen && <SmartSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />}
       </AnimatePresence>
 
       <ChatAssistant />
