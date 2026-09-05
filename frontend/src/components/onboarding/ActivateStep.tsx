@@ -52,7 +52,7 @@ export default function ActivateStep({ onComplete, onBack }: ActivateStepProps) 
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Ready to Launch?</h2>
         <p className="text-gray-600 max-w-md mx-auto">
-          You've completed all setup steps. Activate your workspace to start accepting bookings.
+          You&apos;ve completed all setup steps. Activate your workspace to start accepting bookings.
         </p>
       </div>
 

@@ -148,7 +148,7 @@ export default function NotificationPanel() {
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">No notifications</p>
                   <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-                    We'll notify you when something arrives
+                    We&apos;ll notify you when something arrives
                   </p>
                 </div>
               ) : (
