@@ -13,7 +13,9 @@ import {
   EyeIcon, 
   EyeSlashIcon,
   ArrowRightIcon,
-  XCircleIcon
+  XCircleIcon,
+  CheckIcon,
+  SparklesIcon
 } from '@heroicons/react/24/outline';
 
 interface LoginForm {
@@ -31,7 +33,6 @@ export default function LoginForm() {
   
   const { setToken, setUser } = useAuthStore();
 
-  // ✅ CRITICAL FIX: Use full URL directly
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
   const onSubmit = async (data: LoginForm) => {
@@ -45,7 +46,6 @@ export default function LoginForm() {
       formData.append('username', data.username);
       formData.append('password', data.password);
 
-      // ✅ Use full URL, not relative path
       const response = await axios.post(`${API_URL}/api/auth/token`, formData.toString(), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -55,7 +55,6 @@ export default function LoginForm() {
       const { access_token } = response.data;
       setToken(access_token);
       
-      // Get user info - use full URL
       const userResponse = await axios.get(`${API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${access_token}` }
       });
@@ -63,7 +62,6 @@ export default function LoginForm() {
       setUser(userResponse.data);
       toast.success('Welcome back!');
       
-      // Check onboarding status
       const onboardingResponse = await axios.get(`${API_URL}/api/onboarding/status`, {
         headers: { Authorization: `Bearer ${access_token}` }
       });
@@ -84,57 +82,107 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-        {/* Left visual / branding - hidden on mobile */}
-        <div className="hidden md:flex flex-col items-start justify-center space-y-6 pl-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-lg">
-            <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+    <div className="min-h-screen flex bg-gray-50 overflow-hidden">
+      {/* LEFT SECTION - BRAND & BRANDING (DESKTOP ONLY) */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-900 relative overflow-hidden flex-col justify-between p-12">
+        {/* Animated background elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+
+        <div className="relative z-10">
+          {/* Logo & Brand Name */}
+          <div className="mb-12">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-white/15 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg">
+              <SparklesIcon className="w-7 h-7 text-white" />
+            </div>
+            <h1 className="mt-6 text-4xl font-bold text-white tracking-tight">CareOps</h1>
           </div>
 
-          <div className="max-w-sm">
-            <h1 className="text-4xl font-extrabold text-gray-900">CareOps</h1>
-            <p className="mt-2 text-gray-600">The unified operations platform for modern teams. Secure, reliable, and built for scale.</p>
+          {/* Main Tagline */}
+          <div className="max-w-md space-y-6">
+            <div>
+              <h2 className="text-5xl font-bold text-white leading-tight mb-4">
+                Manage your operations with confidence.
+              </h2>
+              <p className="text-lg text-indigo-100">
+                A unified platform designed for modern service businesses. One place for bookings, messaging, inventory, and analytics.
+              </p>
+            </div>
 
-            <div className="mt-6 w-full bg-white rounded-2xl shadow-sm p-4 border border-gray-100">
-              <h3 className="text-sm font-semibold text-gray-800">Trusted by teams</h3>
-              <p className="mt-2 text-sm text-gray-500">Manage operations, bookings, and inventory in a single place.</p>
+            {/* Benefits List */}
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="flex items-center space-x-3">
+                <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-400/30 border border-green-400 flex items-center justify-center">
+                  <CheckIcon className="w-3 h-3 text-green-200" />
+                </div>
+                <span className="text-white/90 font-medium">Secure & SOC2 Type II Compliant</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-400/30 border border-green-400 flex items-center justify-center">
+                  <CheckIcon className="w-3 h-3 text-green-200" />
+                </div>
+                <span className="text-white/90 font-medium">Simple & Intuitive</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-400/30 border border-green-400 flex items-center justify-center">
+                  <CheckIcon className="w-3 h-3 text-green-200" />
+                </div>
+                <span className="text-white/90 font-medium">Reliable & Always Available</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Right: Login form card */}
-        <div className="flex items-center justify-center">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-md p-8 border border-gray-100">
-            <div className="mb-6 text-center">
-              <div className="flex items-center justify-center mx-auto w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
+        {/* Bottom Brand Info */}
+        <div className="relative z-10">
+          <p className="text-sm text-indigo-200">
+            Trusted by 1000+ businesses worldwide
+          </p>
+        </div>
+      </div>
 
-              <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">Welcome back <span aria-hidden>👋</span></h2>
-              <p className="mt-2 text-sm text-gray-600">Sign in to continue to your account.</p>
-              <p className="mt-4 text-sm text-gray-600">
-                Don't have an account?{' '}
-                <Link href="/register" className="font-medium text-blue-600 hover:underline">Create your workspace</Link>
+      {/* RIGHT SECTION - LOGIN FORM */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 lg:p-12">
+        <div className="w-full max-w-[440px]">
+          {/* Mobile Logo - Visible only on small screens */}
+          <div className="lg:hidden mb-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-2xl shadow-lg mb-4">
+              <SparklesIcon className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mt-2">CareOps</h1>
+          </div>
+
+          {/* Form Card */}
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-10 sm:p-12">
+            {/* Form Header */}
+            <div className="mb-8">
+              <h2 className="text-4xl font-bold text-gray-900 leading-tight">
+                Welcome back <span className="text-4xl">👋</span>
+              </h2>
+              <p className="mt-3 text-base text-gray-600">
+                Sign in to your workspace to continue
               </p>
             </div>
 
+            {/* Error Alert */}
             {loginError && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-start">
-                <XCircleIcon className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-red-700">{loginError}</div>
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-in fade-in">
+                <XCircleIcon className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-red-900">{loginError}</p>
+                </div>
               </div>
             )}
 
+            {/* Login Form */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
+              {/* Email Field */}
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">Email address <span className="text-red-500">*</span></label>
+                <label htmlFor="username" className="block text-sm font-semibold text-gray-900 mb-3">
+                  Email address
+                </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <EnvelopeIcon className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
@@ -146,9 +194,9 @@ export default function LoginForm() {
                       }
                     })}
                     type="email"
-                    className={`block w-full pl-12 pr-3 h-12 border ${
-                      errors.username ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                    } rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                    className={`block w-full pl-12 pr-4 h-12 border ${
+                      errors.username ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
+                    } rounded-lg text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 focus:border-transparent transition-all`}
                     placeholder="you@company.com"
                     disabled={loading}
                     aria-invalid={errors.username ? 'true' : 'false'}
@@ -156,14 +204,17 @@ export default function LoginForm() {
                   />
                 </div>
                 {errors.username && (
-                  <p id="username-error" className="mt-2 text-sm text-red-600">{errors.username.message}</p>
+                  <p id="username-error" className="mt-2 text-sm text-red-600 font-medium">{errors.username.message}</p>
                 )}
               </div>
 
+              {/* Password Field */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Password <span className="text-red-500">*</span></label>
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-900 mb-3">
+                  Password
+                </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <LockClosedIcon className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
@@ -176,8 +227,8 @@ export default function LoginForm() {
                     })}
                     type={showPassword ? 'text' : 'password'}
                     className={`block w-full pl-12 pr-12 h-12 border ${
-                      errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                    } rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                      errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
+                    } rounded-lg text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-0 focus:border-transparent transition-all`}
                     placeholder="••••••••"
                     disabled={loading}
                     aria-invalid={errors.password ? 'true' : 'false'}
@@ -187,40 +238,47 @@ export default function LoginForm() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700 transition-colors"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? (
-                      <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      <EyeSlashIcon className="h-5 w-5" />
                     ) : (
-                      <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      <EyeIcon className="h-5 w-5" />
                     )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p id="password-error" className="mt-2 text-sm text-red-600">{errors.password.message}</p>
+                  <p id="password-error" className="mt-2 text-sm text-red-600 font-medium">{errors.password.message}</p>
                 )}
               </div>
 
-              <div className="flex items-center justify-between">
+              {/* Remember & Forgot */}
+              <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center">
                   <input
                     {...register('remember')}
                     id="remember"
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded-md cursor-pointer"
                   />
-                  <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">Remember me</label>
+                  <label htmlFor="remember" className="ml-3 block text-sm text-gray-700 cursor-pointer font-medium">
+                    Remember me
+                  </label>
                 </div>
-                <div className="text-sm">
-                  <Link href="/forgot-password" className="font-medium text-blue-600 hover:underline">Forgot password?</Link>
-                </div>
+                <Link 
+                  href="/forgot-password" 
+                  className="text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                >
+                  Forgot password?
+                </Link>
               </div>
 
+              {/* Sign In Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 flex justify-center items-center px-4 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full h-12 flex justify-center items-center px-6 text-base font-semibold rounded-lg text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 active:from-indigo-800 active:to-indigo-900 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 {loading ? (
                   <>
@@ -233,14 +291,23 @@ export default function LoginForm() {
                 ) : (
                   <>
                     Sign in
-                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+                    <ArrowRightIcon className="ml-3 h-5 w-5" />
                   </>
                 )}
               </button>
             </form>
 
+            {/* Sign Up Link */}
+            <p className="mt-8 text-center text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link href="/register" className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
+                Create your workspace
+              </Link>
+            </p>
+
+            {/* Demo Credentials - Development Only */}
             {process.env.NODE_ENV === 'development' && (
-              <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+              <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -248,21 +315,26 @@ export default function LoginForm() {
                     </svg>
                   </div>
                   <div className="ml-3 flex-1">
-                    <p className="text-sm font-medium text-blue-800">Demo Credentials</p>
-                    <div className="mt-2 grid grid-cols-2 gap-3 text-xs">
+                    <p className="text-sm font-semibold text-blue-900">Demo Credentials</p>
+                    <div className="mt-3 grid grid-cols-2 gap-3 text-xs">
                       <div>
-                        <p className="text-blue-600">Email:</p>
-                        <p className="font-mono font-medium text-gray-900">admin@demo.com</p>
+                        <p className="text-blue-700 font-medium">Email:</p>
+                        <p className="font-mono font-semibold text-gray-900 mt-1">admin@demo.com</p>
                       </div>
                       <div>
-                        <p className="text-blue-600">Password:</p>
-                        <p className="font-mono font-medium text-gray-900">Demo123456</p>
+                        <p className="text-blue-700 font-medium">Password:</p>
+                        <p className="font-mono font-semibold text-gray-900 mt-1">demo123456</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Security Statement */}
+          <div className="mt-8 text-center text-xs text-gray-500 space-y-2">
+            <p>🔒 Enterprise-grade security • SOC2 Type II • GDPR Compliant</p>
           </div>
         </div>
       </div>
