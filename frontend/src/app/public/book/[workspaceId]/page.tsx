@@ -18,8 +18,8 @@ export default function PublicBookingPage() {
   const [workspace, setWorkspace] = useState(null);
   const [services, setServices] = useState<Service[]>([]);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [step, setStep] = useState(1);
   
   useEffect(() => {
